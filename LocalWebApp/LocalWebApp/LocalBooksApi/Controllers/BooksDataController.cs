@@ -85,6 +85,33 @@ namespace LocalBooksApi.Controllers
             return _booksDataControllerUtilities.GetAllNations();
         }
 
+        [HttpGet("[action]")]
+        public IEnumerable<NationDetail> GetAllNationDetails()
+        {
+            IEnumerable<NationGeography> nations = _booksDataControllerUtilities.GetAllNations();
+            return nations.Select(nation => new NationDetail(nation)).ToList();
+        }
+
+        /// <summary>
+        /// Updates the flag for a country.
+        /// </summary>
+        /// <param name="updateNation">The updated nation details.</param>
+        /// <returns>The action result.</returns>
+        [HttpPost]
+        [Route("UpdateNationDetail")]
+        public IActionResult UpdateNationDetail([FromBody] NationDetail updateNation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            NationDetailUpdateResponse response =
+                _booksDataControllerUtilities.UpdateNationDetail(updateNation);
+
+            return Ok(response);
+        }
+
         [HttpGet("[action]/{userId}")]
         [ProducesResponseType(201, Type = typeof(ExportText))]
         public ExportText GetExportCsvText(string userId)

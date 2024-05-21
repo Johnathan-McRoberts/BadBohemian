@@ -77,6 +77,7 @@ import { MainImportExportComponent } from './Components/ImportExport/main-import
 import { TextFileExportComponent } from './Components/ImportExport/text-file-export/text-file-export.component';
 import { TextFileImportComponent } from './Components/ImportExport/text-file-import/text-file-import.component';
 import { EmailExportComponent } from './Components/ImportExport/email-export/email-export.component';
+import { NationalFlagImportComponent } from './Components/ImportExport/national-flag-import/national-flag-import.component';
 
 // Charts
 import { MainChartsPageComponent } from './Components/Charts/main-charts-page/main-charts-page.component';
@@ -128,6 +129,7 @@ import { CountryMapsComponent } from './Components/Charts/country-maps/country-m
             TextFileExportComponent,
             TextFileImportComponent,
             EmailExportComponent,
+            NationalFlagImportComponent,
 
             MainChartsPageComponent,
             MainBooksChartsComponent,

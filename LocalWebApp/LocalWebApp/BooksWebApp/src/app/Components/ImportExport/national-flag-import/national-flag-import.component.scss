@@ -1,0 +1,46 @@
+.mat-cell {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.scrollable {
+    height: 95px;
+    overflow-y: auto;
+}
+
+.noborders {
+    border: none;
+}
+
+.noborders-table {
+    width: 100%;
+    border: none;
+}
+
+img.aspectshrink {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    height: 85px;
+}
+
+
+
+.div-1 {
+    background-color: #EBEBEB;
+}
+
+.div-2 {
+    background-color: #ABBAEA;
+}
+
+.div-3 {
+    background-color: #FBD603;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.edit-column {
+    width: 33%;
+    margin: 0 auto;
+}

@@ -1,0 +1,190 @@
+
+<p *ngIf="!nationDetails"><em>Loading...</em></p>
+
+<mat-spinner *ngIf="!nationDetails"></mat-spinner>
+
+<mat-accordion>
+
+    <mat-expansion-panel [expanded]="showAllNationsPanelOpenState"
+                         (opened)="showAllNationsPanelOpenState = true"
+                         (closed)="showAllNationsPanelOpenState = false">
+
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Nations
+            </mat-panel-title>
+            <mat-panel-description>
+                <div *ngIf="!selectedNationToDisplay">
+                    Select nation to update flag for
+                </div>
+                <div *ngIf="selectedNationToDisplay">
+                    <span><b>Selected Nation: </b> {{editNation.name}} <b>Capital: </b> {{editNation.capital}}</span>
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+
+        <div class="mat-elevation-z8" *ngIf="nationDetails">
+
+            <table class="noborders-table">
+                <tr class="noborders">
+                    <td class="noborders">
+                        <mat-form-field appearance="fill">
+                            <input matInput (keyup)="applyNationsFilter($event.target)"
+                                   placeholder="Filter">
+                        </mat-form-field>
+                    </td>
+                    <td class="noborders">
+                        <mat-paginator #nationsTablePaginator
+                                       [length]="5"
+                                       [pageSize]="4"
+                                       [pageSizeOptions]="[5, 10, 20]"
+                                       showFirstLastButtons>
+                        </mat-paginator>
+                    </td>
+                </tr>
+            </table>
+
+            <mat-table #table [dataSource]="nationsDataSource"
+                       #nationsTableSort="matSort"
+                       matSortActive="name"
+                       matSortDisableClear
+                       matSortDirection="asc"
+                       matSort>
+
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="capital">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Capital </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.capital}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="latitude">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Latitude </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.latitude | number}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="longitude">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Longitude </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.longitude | number}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="flag">
+                    <mat-header-cell *matHeaderCellDef> Flag </mat-header-cell>
+                    <mat-cell *matCellDef="let element"><img src="{{element.imageUri}}" class="aspectshrink" /></mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="nationsDisplayedColumns"></mat-header-row>
+
+                <mat-row *matRowDef="let row; columns: nationsDisplayedColumns"
+                         (click)="onNationRowClicked(row)"></mat-row>
+
+            </mat-table>
+
+        </div>
+
+    </mat-expansion-panel>
+
+</mat-accordion>
+
+<div *ngIf="selectedNationToEdit" class="full-width-table div-1">
+
+    <form [formGroup]="editNationFormGroup" class="full-width-table div-2">
+
+        <table class="full-width-table div-3">
+
+            <tr>
+                <th class="edit-column"></th>
+                <th class="edit-column"></th>
+                <th class="edit-column"></th>
+            </tr>
+
+            <tr>
+
+                <td><b>Country</b></td>
+                <td>
+
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Country Name</mat-label>
+                            <input matInput placeholder="Country" formControlName="name" required>
+                        </mat-form-field>
+                    </div>
+
+                </td>
+
+                <td rowspan="2">
+                    <img src="{{imageUri}}" class="aspectshrink" />
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td><b>Capital</b></td>
+                <td>
+
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Country Capital</mat-label>
+                            <input matInput placeholder="Capital" formControlName="capital" required>
+                        </mat-form-field>
+                    </div>
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td><b>Flag</b></td>
+                <td colspan="2">
+
+                    <div>
+                        <mat-form-field appearance="fill" style="width: 100%">
+                            <mat-label>Flag URL</mat-label>
+                            <input matInput placeholder="Image URL" formControlName="imageUri">
+                        </mat-form-field>
+                    </div>
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    <button mat-raised-button
+                            [disabled]="!editNationFormGroup.valid"
+                            (click)="onDisplayUpdated()">
+                        Display Updated Details
+                    </button>
+
+                </td>
+
+                <td>
+
+                    <button [disabled]="!editNationFormGroup.valid || updateInProgress"
+                            mat-raised-button
+                            color="primary"
+                            (click)="onUpdateFlag()">
+                        Update Item
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </table>
+    </form>
+
+
+</div>
+
+

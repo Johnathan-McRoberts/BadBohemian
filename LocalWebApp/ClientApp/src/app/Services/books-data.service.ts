@@ -13,6 +13,7 @@ import { TagBooks } from '../Models/tag-books';
 import { DeltaBooks } from '../Models/delta-books';
 import { YearlyTally, IYearlyTally } from '../Models/yearly-tally';
 import { NationGeography } from '../Models/nation-geography';
+import { NationDetail } from '../Models/nation-detail';
 import { EditorDetails } from '../Models/editor-details';
 import { ExportText } from '../Models/export-text';
 import { ExportDataToEmailRequest, ExportDataToEmailResponse } from '../Models/export-data-to-email';
@@ -141,6 +142,15 @@ export class BooksDataService {
                 {
                     this.nations = result as NationGeography[];
                 },
+                error => console.error(error));
+    }
+
+    public nationDetails: NationDetail[] | undefined;
+    fetchAllNationDetailsData() {
+        return this.http.get<NationDetail[]>(this.requestUrl + "GetAllNationDetails")
+            .toPromise().then(result => {
+                this.nationDetails = result as NationDetail[];
+            },
                 error => console.error(error));
     }
 

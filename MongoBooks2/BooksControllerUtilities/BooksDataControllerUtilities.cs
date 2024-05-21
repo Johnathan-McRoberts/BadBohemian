@@ -1047,6 +1047,43 @@ namespace BooksControllerUtilities
             return response;
         }
 
+        public NationDetailUpdateResponse UpdateNationDetail(NationDetail updateNation)
+        {
+            // set up the successful response
+            NationDetailUpdateResponse response = new NationDetailUpdateResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                UpdateItem = new NationDetail(updateNation),
+                FailReason = "",
+                UserId = ""
+            };
+
+            // Find the item
+            GeographyProvider geographyProvider;
+            BooksReadProvider booksReadProvider;
+            _books = new ObservableCollection<Book>();
+
+            if (GetProviders(out geographyProvider, out booksReadProvider))
+            {
+                Nation itemToUpdate =
+                    _nationsReadDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == updateNation.Id);
+
+                if (itemToUpdate == null)
+                {
+                    response.ErrorCode = (int)BookReadAddResponseCode.UnknownItem;
+                    response.FailReason = "Could not find item";
+                }
+                else
+                {
+                    itemToUpdate.ImageUri = updateNation.ImageUri;
+
+                    _nationsReadDatabase.UpdateDatabaseItem(itemToUpdate);
+                }
+            }
+
+            return response;
+        }
+
         #endregion
 
         public BooksDataControllerUtilities(MongoDbSettings dbSettings, SmtpConfig mailConfig) : base(dbSettings)

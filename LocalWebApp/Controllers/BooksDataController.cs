@@ -1,4 +1,6 @@
-﻿namespace LocalWebApp.Controllers
+﻿using System.Linq;
+
+namespace LocalWebApp.Controllers
 {
     using System.Collections.Generic;
     using System.IO;
@@ -84,6 +86,13 @@
         public IEnumerable<NationGeography> GetAllNations()
         {
             return _booksDataControllerUtilities.GetAllNations();
+        }
+
+        [HttpGet("[action]")]
+        public IEnumerable<NationDetail> GetAllNationDetails()
+        {
+            IEnumerable<NationGeography> nations = _booksDataControllerUtilities.GetAllNations();
+            return nations.Select(nation => new NationDetail(nation)).ToList();
         }
 
         [HttpGet("[action]/{userId}")]
