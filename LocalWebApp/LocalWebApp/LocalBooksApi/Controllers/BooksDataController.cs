@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+
+using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.Extensions.Options;
 
@@ -257,6 +259,25 @@ namespace LocalBooksApi.Controllers
                     "JMcR", importer.ImportedBooks);
 
             return Ok(result);
+        }
+
+        [HttpGet("[action]/{userId}")]
+        [ProducesResponseType(typeof(FileContentResult), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(201, Type = typeof(FileContentResult))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetExportPdfFile(string userId)
+        {
+            FileStream exportFileStream =
+                _booksDataControllerUtilities.GetExportPdfFile(userId);
+                
+            if (exportFileStream == null)
+            {
+                return NotFound();
+            }
+
+            // Set the headers to allow a file byte stream and return the file.
+            Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+            return File(exportFileStream!, "application/pdf", "books.pdf");
         }
 
         #endregion

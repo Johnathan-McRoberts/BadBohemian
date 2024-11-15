@@ -31,6 +31,10 @@ namespace BooksControllerUtilities
     using BooksDatabase.Implementations;
     using BooksMailbox;
 
+    using BooksPdfGenerators;
+    using BooksPdfGenerators.Interfaces;
+    using BooksPdfGenerators.Generators;
+
     public class BooksDataControllerUtilities : BaseControllerUtilities
     {
         #region Constants
@@ -142,6 +146,11 @@ namespace BooksControllerUtilities
         /// The nations read from database.
         /// </summary>
         private ObservableCollection<NationGeography> _nations;
+
+        /// <summary>
+        /// The pdf report generator.
+        /// </summary>
+        private readonly IBooksReportGenerator _booksReportGenerator;
 
         private readonly SmtpConfig _smtpConfig;
 
@@ -311,13 +320,36 @@ namespace BooksControllerUtilities
             return true;
         }
 
-        private string GetExportFileName(string exportDirectory, string fileName)
+        private string GetExportFileName(string exportDirectory, string fileName, string extension = ".csv")
         {
             DateTime time = DateTime.Now;
             fileName += " ";
             fileName += time.ToString("yyyy MMMM dd H-mm-ss");
-            fileName += ".csv";
+            fileName += extension;
             return Path.Combine(exportDirectory, fileName);
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
+        private void WriteBooksToPdfFile(string fileName, List<BookRead> books)
+        {
+            PdfExportContent booksPdf = 
+                _booksReportGenerator.GenerateBooksReport(books);
+
+            using (MemoryStream memoryStream = new MemoryStream(ReadFully(booksPdf.FileData)))
+            {
+                using Stream streamToWriteTo = File.Open(fileName, FileMode.Create);
+
+                memoryStream.Position = 0;
+                memoryStream.CopyTo(streamToWriteTo);
+            }           
         }
 
         public void WriteBooksToFile(string filename, List<BookRead> booksRead)
@@ -753,6 +785,45 @@ namespace BooksControllerUtilities
             return null;
         }
 
+        public FileStream GetExportPdfFile(string userId)
+        {
+            User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+            if (foundUser == null)
+            {
+                return null;
+            }
+
+            GeographyProvider geographyProvider;
+            BooksReadProvider booksReadProvider;
+            _books = new ObservableCollection<Book>();
+
+            if (GetProviders(out geographyProvider, out booksReadProvider))
+            {
+                if (booksReadProvider.BooksRead != null && booksReadProvider.BooksRead.Any())
+                {
+                    List<BookRead> books =
+                        booksReadProvider
+                            .BooksRead
+                            .Where(x => x.User == foundUser.Name)
+                            .OrderBy(x => x.Date)
+                            .ToList();
+
+                    // Get the file export string 
+                    string fileName = 
+                        GetExportFileName(ExportDirectory, "Books", ".pdf");
+                    WriteBooksToPdfFile(fileName, books);
+
+                    // Return the formatted text
+                    if (File.Exists(fileName))
+                    {
+                        return new FileStream(fileName, FileMode.Open);
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public EditorDetails GetEditorDetails()
         {
             GeographyProvider geographyProvider;
@@ -1086,7 +1157,9 @@ namespace BooksControllerUtilities
 
         #endregion
 
-        public BooksDataControllerUtilities(MongoDbSettings dbSettings, SmtpConfig mailConfig) : base(dbSettings)
+        public BooksDataControllerUtilities(
+            MongoDbSettings dbSettings, 
+            SmtpConfig mailConfig) : base(dbSettings)
         {
             _smtpConfig = mailConfig;
             DatabaseConnectionString = dbSettings.DatabaseConnectionString;
@@ -1097,6 +1170,7 @@ namespace BooksControllerUtilities
             _booksReadFromDatabase = new ObservableCollection<BookRead>();
             _nationsReadFromDatabase = new ObservableCollection<Nation>();
             _usersReadFromDatabase = new ObservableCollection<User>();
+            _booksReportGenerator = new BooksReportGenerator();
 
             if (!dbSettings.UseRemoteHost)
             {

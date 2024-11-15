@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,7 @@
     <ProjectReference Include="..\BooksCore\BooksCore.csproj" />
     <ProjectReference Include="..\BooksDatabase\BooksDatabase.csproj" />
     <ProjectReference Include="..\BooksMailbox\BooksMailbox.csproj" />
+    <ProjectReference Include="..\BooksPdfGenerators\BooksPdfGenerators.csproj" />
   </ItemGroup>
 
 </Project>

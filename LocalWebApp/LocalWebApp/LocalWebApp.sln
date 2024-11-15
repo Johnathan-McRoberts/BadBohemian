@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksUtilities", "..\..\Mon
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BooksWebApp", "BooksWebApp\BooksWebApp.esproj", "{3E01313D-2D59-40F5-B13C-0CCCAE881E05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalBooksApi", "LocalBooksApi\LocalBooksApi.csproj", "{824D4262-CD94-47C6-AB56-D070A8DDD0F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalBooksApi", "LocalBooksApi\LocalBooksApi.csproj", "{824D4262-CD94-47C6-AB56-D070A8DDD0F4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{165E9399-F02D-4B5F-B5F5-28649CA04EE4} = {165E9399-F02D-4B5F-B5F5-28649CA04EE4}
 		{1822DBF9-753D-4AED-8834-E04E4E91577C} = {1822DBF9-753D-4AED-8834-E04E4E91577C}
@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalBooksApi", "LocalBooks
 		{61F0D977-ED96-4DD8-A260-42257C5BB68D} = {61F0D977-ED96-4DD8-A260-42257C5BB68D}
 		{886E784C-20AF-49D2-AAED-9A49D6235E5B} = {886E784C-20AF-49D2-AAED-9A49D6235E5B}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksPdfGenerators", "..\..\MongoBooks2\BooksPdfGenerators\BooksPdfGenerators.csproj", "{3716911C-3614-42CD-A3FB-3C3C4B87887B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +68,10 @@ Global
 		{824D4262-CD94-47C6-AB56-D070A8DDD0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{824D4262-CD94-47C6-AB56-D070A8DDD0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{824D4262-CD94-47C6-AB56-D070A8DDD0F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3716911C-3614-42CD-A3FB-3C3C4B87887B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3716911C-3614-42CD-A3FB-3C3C4B87887B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3716911C-3614-42CD-A3FB-3C3C4B87887B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3716911C-3614-42CD-A3FB-3C3C4B87887B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
